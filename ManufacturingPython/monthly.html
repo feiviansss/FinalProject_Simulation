@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sedan:ital@0;1&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>MANUFACTURING FACILITY</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    
+    <center>
+        <!-- HEADER -->
+        <div class="footer">
+            <a class="dashboard sin-subrayado" href="index.html">THE DASHBOARD</a>
+        </div>
+        <!-- TOP CONTAINERS -->
+        <div class="container">
+            <!-- TOP CONTAINER -->
+            <div class="row">
+                <div class="col" style="align-content: center;">
+                    <h3>How do you wish to visualize the data?</h3> 
+                </div>
+            </div>  
+            <!-- TOP BUTTONS -->
+            <div class="row">
+                <div class="col">
+                    <a 
+                        type="button" class="btn btn-primary btn-lg" 
+                        href="daily.html"
+                        style="background-color: #49785F; border-color: #49785F; font-family: Sedan;">
+                        DAILY
+                    </a>
+                </div>
+                <div class="col">
+                    <a
+                        type="button" class="btn btn-primary btn-lg" 
+                        href="weekly.html"
+                        style="background-color: #B4DAA7; border-color: #B4DAA7; font-family: Sedan;">
+                        WEEKLY
+                    </a>
+                </div>
+                <div class="col">
+                    <a 
+                        type="button" class="btn btn-primary btn-lg" 
+                        href="monthly.html"
+                        style="background-color: #C2552E; border-color: #C2552E; font-family: Sedan;">
+                        MONTHLY
+                    </a>
+                </div>
+                <div class="col">
+                    <a 
+                        type="button" class="btn btn-primary btn-lg" 
+                        href="visualizer.html"
+                        style="background-color: #FF5733; border-color: #FF5733; font-family: Sedan;">
+                        VISUALIZATION
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- GRAPH CONTAINER -->
+        <div class="container info">
+            <!-- CONTAINERS FOR GRAPHS -->
+            <div class="container mt-8">
+                <div class="row">
+                    <div class="col">
+                        <div class="graph-container" id="graph1">
+                            <canvas id="totalProductionPerDay"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="graph-container graphtxt" id="graph2">
+                            The depicted graph demonstrates the monthly production output of our manufacturing facility.<br> As evident, our productivity and efficiency across all tasks are notably high.
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="graph-container" id="graph3">
+                            <div class="graph-container" style="height: 600px; width: 600px;" id="graph3">
+                                <canvas id="totalOccupancyPerDay"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="graph-container graphtxt" id="graph4">
+                            This pie chart depicts the occupancy percentage monthly of each of our 6 workstations. <br>We're fully operational, maintaining constant activity!
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="graph-container" id="graph5">
+                            <canvas id="totalAvgProdTimePerDay"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="graph-container" id="graph6">
+                            The average production time per month is calculated as the mean duration of all production activities across our workstations within a single day. <br>This metric is visually represented in the graph provided.
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="graph-container"  id="graph7">
+                            <canvas id="totalProdRejPerDay"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="graph-container" id="graph8">
+                            On certain days, a few of our produced items may exhibit defects. This chart indicates the montlhy occurrence of such defects, enabling us to reject them before reaching consumers. Our commitment to quality ensures that we maintain exceptionally <br>low levels of defective products, delivering only top-notch quality to our customers!
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="graph-container" id="graph9">
+                            <canvas id="totalAvgDelayPerDay"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="graph-container" id="graph10">
+                            The graph displays the average monthly delay experienced due to various factors. <br>Our goal is to minimize this delay to enhance productivity.
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="graph-container" style="height: 600px; width: 600px;"id="graph11">
+                            <canvas id="totalAccRatePerDay"></canvas>
+                            <script src = "monthlyGraphs.js"></script>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="graph-container" id="graph12">
+                            The provided graph illustrates our accident rate. Safety is a fundamental principle we uphold, hence, as depicted, we typically experience zero accidents per month, at least within the most recent data.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <!-- FOOTER -->
+        <div class="footer">
+            © 2024
+        </div>
+    </center>
+    
+</body>
+</html>

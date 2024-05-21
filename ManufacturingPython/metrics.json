@@ -1,0 +1,71 @@
+[
+    {
+        "Total_production_per_day": 88,
+        "Occupancy_per_workstation": {
+            "Workstation 1": 0.998,
+            "Workstation 2": 0.998,
+            "Workstation 3": 1.0,
+            "Workstation 4": 0.998,
+            "Workstation 5": 0.998,
+            "Workstation 6": 0.998
+        },
+        "Average_production_time_per_workstation": {
+            "Workstation 1": 45.49015833287949,
+            "Workstation 2": 45.49015833287949,
+            "Workstation 3": 45.49015833287949,
+            "Workstation 4": 45.49015833287949,
+            "Workstation 5": 45.49015833287949,
+            "Workstation 6": 45.49015833287949
+        },
+        "Production_rejection_by_number": 3,
+        "Production_rejection_percentage": 3.4090909090909087,
+        "Average_delay_time": 272.94094999727685,
+        "Accident_rate": 0.0
+    },
+    {
+        "Total_production_per_day": 93,
+        "Occupancy_per_workstation": {
+            "Workstation 1": 0.998,
+            "Workstation 2": 0.998,
+            "Workstation 3": 0.998,
+            "Workstation 4": 0.998,
+            "Workstation 5": 0.998,
+            "Workstation 6": 0.998
+        },
+        "Average_production_time_per_workstation": {
+            "Workstation 1": 51.65627370200429,
+            "Workstation 2": 51.65627370200429,
+            "Workstation 3": 51.65627370200429,
+            "Workstation 4": 51.65627370200429,
+            "Workstation 5": 51.65627370200429,
+            "Workstation 6": 51.65627370200429
+        },
+        "Production_rejection_by_number": 5,
+        "Production_rejection_percentage": 5.376344086021505,
+        "Average_delay_time": 309.93764221202576,
+        "Accident_rate": 0.0
+    },
+    {
+        "Total_production_per_day": 95,
+        "Occupancy_per_workstation": {
+            "Workstation 1": 0.998,
+            "Workstation 2": 1.0,
+            "Workstation 3": 0.998,
+            "Workstation 4": 1.0,
+            "Workstation 5": 0.998,
+            "Workstation 6": 0.998
+        },
+        "Average_production_time_per_workstation": {
+            "Workstation 1": 42.449912346508235,
+            "Workstation 2": 42.449912346508235,
+            "Workstation 3": 42.449912346508235,
+            "Workstation 4": 42.449912346508235,
+            "Workstation 5": 42.449912346508235,
+            "Workstation 6": 42.449912346508235
+        },
+        "Production_rejection_by_number": 3,
+        "Production_rejection_percentage": 3.1578947368421053,
+        "Average_delay_time": 254.6994740790491,
+        "Accident_rate": 0.0
+    }
+]

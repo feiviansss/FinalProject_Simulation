@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sedan:ital@0;1&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Factory Simulation</title>
+    <style>
+        .workstation {
+            fill: #B4DAA7;
+            stroke: #49785F;
+            stroke-width: 2;
+        }
+
+        .material {
+            fill: #B4DAA7;
+        }
+
+        .product {
+            fill: #C2552E;
+        }
+
+        .workstation-label {
+            font-size: 12px;
+            text-anchor: middle;
+            fill: #49785F;
+        }
+    </style>
+</head>
+<body><center>
+    <!-- HEADER -->
+    <div class="footer">
+        <a class="dashboard sin-subrayado" href="index.html">THE DASHBOARD</a>
+    </div>
+    <!-- TOP CONTAINERS -->
+    <div class="container">
+        <!-- TOP CONTAINER -->
+        <div class="row">
+            <div class="col" style="align-content: center;">
+                <h3>How do you wish to visualize the data?</h3> 
+            </div>
+        </div>  
+        <!-- TOP BUTTONS -->
+        <div class="row">
+            <div class="col">
+                <a 
+                    type="button" class="btn btn-primary btn-lg" 
+                    href="daily.html"
+                    style="background-color: #49785F; border-color: #49785F; font-family: Sedan;">
+                    DAILY
+                </a>
+            </div>
+            <div class="col">
+                <a
+                    type="button" class="btn btn-primary btn-lg" 
+                    href="weekly.html"
+                    style="background-color: #B4DAA7; border-color: #B4DAA7; font-family: Sedan;">
+                    WEEKLY
+                </a>
+            </div>
+            <div class="col">
+                <a 
+                    type="button" class="btn btn-primary btn-lg" 
+                    href="monthly.html"
+                    style="background-color: #C2552E; border-color: #C2552E; font-family: Sedan;">
+                    MONTHLY
+                </a>
+            </div>
+            <div class="col">
+                <a 
+                    type="button" class="btn btn-primary btn-lg" 
+                    href="visualizer.html"
+                    style="background-color: #FF5733; border-color: #FF5733; font-family: Sedan;">
+                    VISUALIZATION
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- GRAPH CONTAINER -->
+    <div class="container info">
+        <div class="dashboard">The Dashboard</div>
+        <div class="mf">MANUFACTURING FACILITY</div>
+    </div>
+
+   
+
+    <div>
+        <label for="numWorkstations" style="font-family: Sedan">Number of workstations:</label>
+        <input type="number" id="numWorkstations" value="6">
+        <label for="numProducts" style="font-family: Sedan">Number of products:</label>
+        <input type="number" id="numProducts" value="10">
+        <button onclick="startSimulation()" style="font-family: Sedan; background-color: #C2552E; border-color: #C2552E;color: white">Start simulation</button>
+        <div>
+            <label for="timeSlider" style="font-family: Sedan">Simulation speed:</label>
+            <input type="range" id="timeSlider" min="1" max="10" value="1">
+            <span id="timeSpeed">1x</span>
+        </div>
+        <div>
+            <p style="font-family: Sedan">Production time: <span id="productionTime">0</span> seconds</p>
+        </div>
+    </div>
+    <svg id="factory"></svg>
+    <div>
+        <p style="font-family: Sedan">Finished products: <span id="finishedProducts">0</span></p>
+    </div>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script>
+        const MAX_RAW_BIN = 25;
+        let finishedProductCount = 0;
+        let simulationSpeed = 1; // Default speed
+        let productionTime = 0;
+        let timer;
+
+        document.getElementById('timeSlider').addEventListener('input', function() {
+            simulationSpeed = parseInt(this.value);
+            document.getElementById('timeSpeed').textContent = `${simulationSpeed}x`;
+            if (timer) clearInterval(timer);
+            timer = setInterval(updateProductionTime, 1000 / simulationSpeed); // Adjust the timer to the new speed
+        });
+
+        function startSimulation() {
+            if (timer) clearInterval(timer); // Restart the timer if it's already running
+            productionTime = 0; // Reset production time
+            updateProductionTime();
+            timer = setInterval(updateProductionTime, 1000 / simulationSpeed); // Start the timer
+            const numWorkstations = parseInt(document.getElementById("numWorkstations").value);
+            const numProducts = parseInt(document.getElementById("numProducts").value);
+            finishedProductCount = 0;
+            updateFinishedProducts();
+            clearSVG(); // Clear SVG before starting a new simulation
+            const svgWidth = 200 + (numWorkstations - 1) * 150 + 200; // Increase container size
+            const svgHeight = 500; // Increase container height
+            const workstationsData = [];
+            const productData = [];
+
+            // Create workstation data
+            for (let i = 0; i < numWorkstations; i++) {
+                workstationsData.push({
+                    id: i + 1,
+                    x: 200 + i * 150, // Separate START container from the first workstation
+                    y: 200,
+                    width: 100,
+                    height: 100,
+                    items: MAX_RAW_BIN,
+                    occupied: false, // Indicates if the workstation is occupied by a product
+                    replenishing: false
+                });
+            }
+
+            // Create product data
+            for (let i = 0; i < numProducts; i++) {
+                productData.push({
+                    id: i + 1,
+                    position: 0,
+                    x: 50 + Math.random() * 80, // Random position within the START container
+                    y: 120 + Math.random() * 60 // Random position within the START container
+                    });
+                    }
+
+                            // Set SVG size based on the number of workstations
+        d3.select("#factory")
+        .attr("width", svgWidth)
+        .attr("height", svgHeight);
+
+    // Draw initial product container
+    const startContainer = d3.select("#factory").append("g");
+    startContainer.append("rect")
+        .attr("x", 0)
+        .attr("y", 100)
+        .attr("width", 100)
+        .attr("height", 100)
+        .attr("fill", "#49785F")
+        .attr("stroke", "#49785F")
+        .attr("stroke-width", 2);
+    startContainer.append("text")
+        .attr("x", 50)
+        .attr("y", 150)
+        .attr("dy", ".35em")
+        .attr("text-anchor", "middle")
+        .text("START");
+
+    // Draw final product container
+    const endContainer = d3.select("#factory").append("g");
+    endContainer.append("rect")
+        .attr("x", svgWidth - 100)
+        .attr("y", 400)
+        .attr("width", 100)
+        .attr("height", 100)
+        .attr("fill", "#49785F")
+        .attr("stroke", "#49785F")
+        .attr("stroke-width", 2);
+    endContainer.append("text")
+        .attr("x", svgWidth - 50)
+        .attr("y", 450)
+        .attr("dy", ".35em")
+        .attr("text-anchor", "middle")
+        .text("END");
+
+    // Draw workstations and material containers
+    workstationsData.forEach(ws => {
+        // Draw workstation
+        d3.select("#factory").append("rect")
+            .attr("x", ws.x)
+            .attr("y", ws.y)
+            .attr("width", ws.width)
+            .attr("height", ws.height)
+            .attr("class", "workstation");
+
+        // Draw material container
+        d3.select("#factory").append("rect")
+            .attr("x", ws.x + ws.width + 10)
+            .attr("y", ws.y)
+            .attr("width", 20)
+            .attr("height", ws.height)
+            .attr("fill", "#fff")
+            .attr("stroke", "#49785F")
+            .attr("stroke-width", 1)
+            .attr("class", "material-container")
+            .attr("data-ws", ws.id);
+
+        updateMaterialContainer(ws);
+
+        // Draw workstation name below the box
+        d3.select("#factory").append("text")
+            .attr("x", ws.x + ws.width / 2)
+            .attr("y", ws.y + ws.height + 15)
+            .attr("dy", ".35em")
+            .attr("text-anchor", "middle")
+            .attr("class", "workstation-label")
+            .text("WS " + ws.id);
+    });
+
+    // Start product movement
+    productData.forEach(product => {
+        moveProduct(product, workstationsData);
+    });
+
+    function updateMaterialContainer(ws) {
+        // Clear previous material
+        d3.selectAll(`.material[data-ws="${ws.id}"]`).remove();
+
+        const container = d3.select(`.material-container[data-ws="${ws.id}"]`);
+        const containerX = parseFloat(container.attr("x"));
+        const containerY = parseFloat(container.attr("y"));
+        const containerWidth = parseFloat(container.attr("width"));
+        const containerHeight = parseFloat(container.attr("height"));
+
+        for (let i = 0; i < ws.items; i++) {
+            d3.select("#factory").append("circle")
+                .attr("cx", containerX + containerWidth / 2)
+                .attr("cy", containerY + containerHeight / 2)
+                .attr("r", 2)
+                .attr("class", "material")
+                .attr("data-ws", ws.id);
+        }
+    }
+
+    function moveProduct(product, workstationsData) {
+        if (product.position < workstationsData.length) {
+            const ws = workstationsData[product.position];
+            if (!ws.occupied && !ws.replenishing) {
+                ws.occupied = true; // Mark workstation as occupied
+
+                const circle = d3.select("#factory").append("circle")
+                    .attr("cx", product.x)
+                    .attr("cy", product.y)
+                    .attr("r", 10)
+                    .attr("class", "product");
+
+                circle.transition()
+                    .duration(7000 / simulationSpeed)
+                    .attr("cx", ws.x + ws.width / 2)
+                    .attr("cy", ws.y + ws.height / 2)
+                    .on('end', () => {
+                        if (ws.items > 0) {
+                            ws.items--; // Subtract material when product arrives
+                            updateMaterialContainer(ws);
+                            product.position++;
+                            product.x = ws.x + ws.width / 2; // Update product's x position
+                            product.y = ws.y + ws.height / 2; // Update product's y position
+                            ws.occupied = false; // Release workstation
+                            moveProduct(product, workstationsData);
+                        } else {
+                            if (ws.items === 0 && !ws.replenishing) {
+                                ws.replenishing = true;
+                                setTimeout(() => {
+                                    ws.items = MAX_RAW_BIN;
+                                    ws.replenishing = false;
+                                    updateMaterialContainer(ws);
+                                    ws.occupied = false; // Release workstation
+                                    moveProduct(product, workstationsData);
+                                }, 15000 / simulationSpeed);
+                            } else {
+                                ws.occupied = false; // Release workstation if no material and not replenishing
+                                moveProduct(product, workstationsData);
+                            }
+                        }
+                    })
+                    .remove();
+            } else {
+                setTimeout(() => {
+                    moveProduct(product, workstationsData);
+                }, 1000 / simulationSpeed);
+            }
+        } else if (product.position === workstationsData.length) {
+            // Move product to final container
+            const circle = d3.select("#factory").append("circle")
+                .attr("cx", product.x)
+                .attr("cy", product.y)
+                .attr("r", 10)
+                .attr("class", "product");
+
+            const finalContainerX = svgWidth - 50;
+            const finalContainerY = 450;
+
+            circle.transition()
+                .duration(1000 / simulationSpeed)
+                .attr("cx", finalContainerX)
+                .attr("cy", finalContainerY)
+                .on('end', () => {
+                    finishedProductCount++;
+                    updateFinishedProducts();
+                    if (finishedProductCount === productData.length) {
+                        clearInterval(timer); // Stop the timer when all products are finished
+                    }
+                })
+                .remove();
+        }
+    }
+
+    function updateFinishedProducts() {
+        document.getElementById('finishedProducts').textContent = finishedProductCount;
+    }
+
+    function updateProductionTime() {
+        productionTime++;
+        document.getElementById('productionTime').textContent = productionTime;
+    }
+}
+
+function clearSVG() {
+    d3.select("#factory").selectAll("*").remove();
+}
+</script>
+
+<!--FOOTER -->
+<div class="footer">
+    © 2024
+    </div>
+    </center>
+    </body>
+    </html>
+

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sedan:ital@0;1&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>MANUFACTURING FACILITY</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    
+    <center>
+        <!-- HEADER -->
+        <div class="footer">
+            <a class="dashboard sin-subrayado" href="index.html">THE DASHBOARD</a>
+        </div>
+        <!-- TOP CONTAINERS -->
+        <div class="container">
+            <!-- TOP CONTAINER -->
+            <div class="row">
+                <div class="col" style="align-content: center;">
+                    <h3>How do you wish to visualize the data?</h3> 
+                </div>
+            </div>  
+            <!-- TOP BUTTONS -->
+            <div class="row">
+                <div class="col">
+                    <a 
+                        type="button" class="btn btn-primary btn-lg" 
+                        href="daily.html"
+                        style="background-color: #49785F; border-color: #49785F; font-family: Sedan;">
+                        DAILY
+                    </a>
+                </div>
+                <div class="col">
+                    <a
+                        type="button" class="btn btn-primary btn-lg" 
+                        href="weekly.html"
+                        style="background-color: #B4DAA7; border-color: #B4DAA7; font-family: Sedan;">
+                        WEEKLY
+                    </a>
+                </div>
+                <div class="col">
+                    <a 
+                        type="button" class="btn btn-primary btn-lg" 
+                        href="monthly.html"
+                        style="background-color: #C2552E; border-color: #C2552E; font-family: Sedan;">
+                        MONTHLY
+                    </a>
+                </div><div class="col">
+                    <a 
+                        type="button" class="btn btn-primary btn-lg" 
+                        href="visualizer.html"
+                        style="background-color: #FF5733; border-color: #FF5733; font-family: Sedan;">
+                        VISUALIZATION
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- GRAPH CONTAINER -->
+        <div class="container info">
+            <!-- CONTAINERS FOR GRAPHS -->
+            <div class="container mt-8">
+                <div class="row">
+                    <div class="col">
+                        <div class="graph-container" id="graph1">
+                            <canvas id="totalProductionPerDay"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="graph-container graphtxt" id="graph2">
+                            Each week of work we generate reports dor our investors and employees. <br>This graph shows the production at the end of each day in an average week so that you can see the total production in the week as a whole.
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="graph-container" id="graph3">
+                            <div class="graph-container" style="height: 600px; width: 600px;" id="graph3">
+                                <canvas id="totalOccupancyPerDay"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="graph-container graphtxt" id="graph4">
+                            To demonstrate the capacities of each of our workstations, here we show the average occupancy of each workstation for every day in a week. <br>This information is also useful for us to check when a workstation needs maintenance or more attention.
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="graph-container" id="graph5">
+                            <canvas id="totalAvgProdTimePerDay"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="graph-container" id="graph6">
+                            We like to see our results in different timeframes to improve the numbers we need to.<br> These are the times in which we completed each production per day of the week.
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="graph-container" style="height: 600px; width: 600px;" id="graph7">
+                            <canvas id="totalProdRejPerDay"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="graph-container" id="graph8">
+                            Also, this is the rejection per day of the week on a regular week of production.<br> We have amazing results in this area, since we reject only a few products per week.
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="graph-container" id="graph9">
+                            <canvas id="totalAvgDelayPerDay"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="graph-container" id="graph10">
+                            Something we need to work on is the delay on each workstation when it is receiving products.<br> This is the grapsh that represents the average delay per day of the week.
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="graph-container" style="height: 600px; width: 600px;"id="graph11">
+                            <canvas id="totalAccRatePerDay"></canvas>
+                            <script src = "weeklyGraphs.js"></script>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="graph-container" id="graph12">
+                            What we are the most proud of: 0.0% accidents on record in a regular week. If you are interested <br>about this statistic, do not hesitate to check our monthly results!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            © 2024
+        </div>
+    </center>
+    
+</body>
+</html>
